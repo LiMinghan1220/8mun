@@ -5,25 +5,9 @@
     <link rel="icon" type="x-icon" href="icon.png">
     <link rel="shortcut icon" type="x-icon" href="icon.png">
     <meta charset="utf-8">
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-45340418289011776",
-            enable_page_level_ads: true
-        });
-
-
-    </script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5CTBKRVD08"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-5CTBKRVD08');
-    </script>
-    <!-- Clarity tracking code for https://songyon.github.io/8valuescn/ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="模联风格测试 - 评估您的外交风格和偏好，帮助您找到最适合的模拟联合国角色">
+    <meta name="version" content="2.0.0">
 </head>
 
 <body>
@@ -44,115 +28,301 @@
         }
 
         @keyframes octocat-wave {
-
-            0%,
-            100% {
-                transform: rotate(0)
-            }
-
-            20%,
-            60% {
-                transform: rotate(-25deg)
-            }
-
-            40%,
-            80% {
-                transform: rotate(10deg)
-            }
+            0%, 100% { transform: rotate(0) }
+            20%, 60% { transform: rotate(-25deg) }
+            40%, 80% { transform: rotate(10deg) }
         }
 
         @media (max-width:500px) {
-            .github-corner:hover .octo-arm {
-                animation: none
-            }
-
-            .github-corner .octo-arm {
-                animation: octocat-wave 560ms ease-in-out
-            }
+            .github-corner:hover .octo-arm { animation: none }
+            .github-corner .octo-arm { animation: octocat-wave 560ms ease-in-out }
         }
     </style>
+
     <h1>模联风格测试</h1>
     <hr>
-    <button class="button" onclick="location.href='instructions.html';" style="font-size:36pt;">点击开始</button>
-    <hr>
-    <h2>这是什么测试？</h2>
-    <p>模联风格测试是一个帮助您了解自己在模拟联合国活动中倾向的外交风格和工作方式的测试。该测试包含多个问题，通过您的回答来评估您在四个主要维度上的倾向：</p>
+    <div class="element">
+        <h2>外交风格测试</h2>
+        <p class="value-description">本测试旨在评估您的外交风格和偏好，帮助您找到最适合的模拟联合国角色。测试基于六个核心维度进行全面评估：</p>
+        
+        <div class="spacer">
+            <div class="explanation-bg">
+                <div class="dimension">
+                    <h3>决策逻辑 (Decision Logic)</h3>
+                    <p>评估您在外交环境中的决策方式：</p>
+                    <ul>
+                        <li><strong>规则优先</strong>：注重程序规范，遵循既定框架</li>
+                        <li><strong>灵活应变</strong>：重视实效，善于随机应变</li>
+                    </ul>
+                </div>
+                
+                <div class="dimension">
+                    <h3>协作方式 (Collaboration Style)</h3>
+                    <p>展现您处理国际事务的偏好：</p>
+                    <ul>
+                        <li><strong>多边合作</strong>：追求广泛共识，建立多方联盟</li>
+                        <li><strong>双边交涉</strong>：专注重点关系，一对一协商</li>
+                    </ul>
+                </div>
+                
+                <div class="dimension">
+                    <h3>问题关注 (Issue Focus)</h3>
+                    <p>反映您的战略眼光：</p>
+                    <ul>
+                        <li><strong>长期视角</strong>：关注根本性和结构性问题</li>
+                        <li><strong>短期目标</strong>：重视当前危机和即时效果</li>
+                    </ul>
+                </div>
 
-    <div class="explanation_bg">
-        <div class="spacer">
-            <div class="explanation_blurb_left">
-                <p class="value"><b style="color:#f44336;">程序性倾向</b></p>
-                <p class="blurb-text">衡量您在会议中对规则和程序的重视程度。高分表示您倾向于严格遵守议事规则和程序性文件，低分则表示您更注重实质性辩论和灵活处理。</p>
-            </div>
-            <div class="explanation_blurb_right">
-                <p class="value"><b style="color:#00897b;">外交风格</b></p>
-                <p class="blurb-text">反映您处理外交事务的方式。高分代表您倾向于正式外交和规范化交流，低分则显示您更喜欢非正式外交和自由协商。</p>
-            </div>
-        </div>
-        <div class="spacer">
-            <div class="explanation_blurb_left">
-                <p class="value"><b style="color:#ff9800;">解决方案</b></p>
-                <p class="blurb-text">评估您解决问题的方法。高分意味着您倾向于系统性解决和长期规划，低分则表示您更擅长快速决策和危机应对。</p>
-            </div>
-            <div class="explanation_blurb_right">
-                <p class="value"><b style="color:#03a9f4;">互动模式</b></p>
-                <p class="blurb-text">体现您偏好的外交互动方式。高分表示您更倾向于多边协商和集体决策，低分则反映您更喜欢双边谈判和个别协调。</p>
+                <div class="dimension">
+                    <h3>妥协能力 (Compromise Capacity)</h3>
+                    <p>体现您的谈判风格：</p>
+                    <ul>
+                        <li><strong>高度妥协</strong>：愿意让步，寻求共同利益</li>
+                        <li><strong>坚持立场</strong>：维护核心利益，不轻易让步</li>
+                    </ul>
+                </div>
+
+                <div class="dimension">
+                    <h3>沟通风格 (Communication Style)</h3>
+                    <p>展示您的外交交流方式：</p>
+                    <ul>
+                        <li><strong>正式外交</strong>：遵循外交礼仪，注重形式</li>
+                        <li><strong>非正式交涉</strong>：灵活务实，直接沟通</li>
+                    </ul>
+                </div>
+
+                <div class="dimension">
+                    <h3>解决创新 (Solution Innovation)</h3>
+                    <p>反映您的问题解决方式：</p>
+                    <ul>
+                        <li><strong>创新优先</strong>：追求创新方案，开拓新思路</li>
+                        <li><strong>传统方法</strong>：依循成熟经验，稳妥可靠</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
-    <h2>外交系统分类</h2>
-    <p>根据您的测试结果，我们会将您的外交风格与以下六种系统进行匹配：</p>
+    <div class="element">
+        <h2>外交系统介绍</h2>
+        <p class="value-description">
+            模拟联合国包含多个不同的外交系统，每个系统都有其独特的特点和风格：
+        </p>
+        <div class="systems-container">
+            <div class="system-scroll">
+                <!-- 传统联合国系统 -->
+                <div class="system-card">
+                    <h3>传统联合国系统</h3>
+                    <p>强调多边主义与国际合作，注重程序性和规范性。下设多个专门机构，各具特色但共同遵循联合国宪章精神。</p>
+                    <div class="subsystems">
+                        <div class="subsystem">
+                            <h4>安理会体系 (UNSC)</h4>
+                            <p>作为处理全球和平与安全问题的主要机构，强调程序性和大国间妥协。适合处理高强度谈判和危机应对。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>儿基会体系 (UNICEF)</h4>
+                            <p>专注于儿童权益与人道主义议题，重视多边合作与创新解决方案。适合处理社会发展问题。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>开发署体系 (UNDP)</h4>
+                            <p>侧重长期发展与能力建设，平衡规则与灵活性。适合处理发展议题，善于制定长期规划。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>难民署体系 (UNHCR)</h4>
+                            <p>专注于难民保护与人道主义援助，需要快速反应能力和灵活协调。善于应对紧急情况，具有较强的实践导向。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>国际法院体系 (ICJ)</h4>
+                            <p>作为司法机构，极度重视程序性和法理依据。擅长严谨的法律分析和论证，注重先例研究。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>环境署体系 (UNEP)</h4>
+                            <p>专注于环境保护与可持续发展，重视创新方案和长期规划。关注环境议题，善于提出创新性解决方案。</p>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="explanation_bg">
-        <div class="spacer">
-            <div class="explanation_blurb_left">
-                <p class="value"><b>中国系统</b></p>
-                <p class="blurb-text">注重共识建设和温和外交，特点是中等程序性、高外交礼仪、高系统性解决和高多边协商。</p>
-            </div>
-            <div class="explanation_blurb_right">
-                <p class="value"><b>传统联合国系统</b></p>
-                <p class="blurb-text">遵循严格的议事规则和正式外交，具有高程序性、高外交礼仪、中等系统性解决和高多边协商的特点。</p>
-            </div>
-        </div>
-        <div class="spacer">
-            <div class="explanation_blurb_left">
-                <p class="value"><b>谈判系统</b></p>
-                <p class="blurb-text">灵活机动、注重实质，表现为低程序性、低外交礼仪、高系统性解决和高双边谈判。</p>
-            </div>
-            <div class="explanation_blurb_right">
-                <p class="value"><b>欧洲系统</b></p>
-                <p class="blurb-text">强调自由辩论和效率，具有中等程序性、中等外交礼仪、高系统性解决和高多边协商的特征。</p>
-            </div>
-        </div>
-        <div class="spacer">
-            <div class="explanation_blurb_left">
-                <p class="value"><b>法学系统</b></p>
-                <p class="blurb-text">严格依法、程序严谨，特点是极高程序性、高外交礼仪、高系统性解决和中等多边协商。</p>
-            </div>
-            <div class="explanation_blurb_right">
-                <p class="value"><b>主新闻中心</b></p>
-                <p class="blurb-text">灵活多变、快速反应，表现为低程序性、中等外交礼仪、低系统性解决和高互动性。</p>
+                <!-- 中国系统 -->
+                <div class="system-card">
+                    <h3>中国系统</h3>
+                    <p>注重共识构建和多边合作，强调规则导向的决策过程，同时保持适度灵活性。倾向长期视角，通过温和妥协实现合作目标。</p>
+                    <div class="subsystems">
+                        <div class="subsystem">
+                            <h4>共识构建型</h4>
+                            <p>高度重视规则和程序，通过多边合作推进共识，注重长期发展。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>区域维护型</h4>
+                            <p>在遵守规则的前提下，注重区域利益维护，适度坚守立场。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>经济主导型</h4>
+                            <p>以规则为基础，重视经济发展和长期合作，适度采用创新方案。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 欧洲系统 -->
+                <div class="system-card">
+                    <h3>欧洲系统</h3>
+                    <p>以高效程序和多边合作为核心，注重前瞻性规划和正式外交礼仪，同时保持适度灵活性。</p>
+                    <div class="subsystems">
+                        <div class="subsystem">
+                            <h4>自由协商型</h4>
+                            <p>强调多边合作和长期规划，保持灵活性并鼓励创新解决方案。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>高效务实型</h4>
+                            <p>注重规则和多边合作，优先处理短期目标，保持正式外交风格。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>人权法治型</h4>
+                            <p>高度重视规则和多边合作，关注长期发展，维持正式外交风格。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 公民社会系统 -->
+                <div class="system-card">
+                    <h3>公民社会系统</h3>
+                    <p>公民社会系统关注人道主义与社会正义，强调grassroots行动与倡导。</p>
+                    <div class="subsystems">
+                        <div class="subsystem">
+                            <h4>人道主义优先型</h4>
+                            <p>高度注重妥协，关注短期目标，通过多边合作推进人道主义议程。适合处理灾难救援、战争期间的平民保护等议题。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>倡导型</h4>
+                            <p>注重妥协与长期规划，通过多边合作和创新方案推动变革。适合处理性别平等、教育权利等议题。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>非政府行动型</h4>
+                            <p>平衡多边合作与妥协，保持灵活性，关注长期发展。适合环境保护组织在相关议题中的代表角色。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 谈判系统 -->
+                <div class="system-card">
+                    <h3>谈判系统</h3>
+                    <p>偏好双边交涉，保持高度灵活性，注重维护自身立场和解决当前问题。</p>
+                    <div class="subsystems">
+                        <div class="subsystem">
+                            <h4>双边技巧型</h4>
+                            <p>专注双边谈判，保持高度灵活性，优先短期目标，适度坚守立场。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>大规模协调型</h4>
+                            <p>平衡双边与多边合作，保持灵活性，注重妥协达成共识。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>利益最大化型</h4>
+                            <p>以双边谈判为主，强调立场坚守，灵活应对短期目标。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 法学系统 -->
+                <div class="system-card">
+                    <h3>法学系统</h3>
+                    <p>高度依赖规则和正式程序，注重长期发展和多边合作。</p>
+                    <div class="subsystems">
+                        <div class="subsystem">
+                            <h4>国际法庭型</h4>
+                            <p>极度重视规则和程序，专注于法律分析和判例研究。适合处理国际法律争端。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>法律咨询型</h4>
+                            <p>注重规则解释和法律建议，保持一定灵活性。适合处理法律咨询和建议工作。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>立法建议型</h4>
+                            <p>关注长期发展，平衡规则与创新。适合参与国际法规范的制定和完善。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 主新闻中心系统 -->
+                <div class="system-card">
+                    <h3>主新闻中心系统</h3>
+                    <p>平衡规则与灵活性，注重信息传播和沟通。关注时事热点，善于多角度分析。</p>
+                    <div class="subsystems">
+                        <div class="subsystem">
+                            <h4>新闻报道型</h4>
+                            <p>保持客观中立，注重信息准确性和时效性。适合新闻报道和实时更新。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>深度分析型</h4>
+                            <p>关注长期趋势，提供深入分析和背景信息。适合特稿和专题报道。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>多媒体创新型</h4>
+                            <p>重视创新表达，善用多媒体手段。适合新媒体报道和创新传播。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 危机系统 -->
+                <div class="system-card">
+                    <h3>危机系统</h3>
+                    <p>以快速反应和灵活应变为核心，注重短期目标和创新解决方案。</p>
+                    <div class="subsystems">
+                        <div class="subsystem">
+                            <h4>快速反应型</h4>
+                            <p>高度灵活，专注于紧急情况处理。适合处理突发危机和紧急事态。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>战略协调型</h4>
+                            <p>平衡短期应对和长期规划，注重多方协调。适合复杂危机的系统性应对。</p>
+                        </div>
+                        <div class="subsystem">
+                            <h4>创新解决型</h4>
+                            <p>重视创新方案，保持高度灵活性。适合非常规危机的创新性处理。</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <h2>关于分数</h2>
-    <p>每个维度的分数都是根据您的回答计算得出，范围从0到100。这些分数反映了您在各个维度上的相对倾向，而不是绝对评价。测试结果会显示您最接近的外交系统类型，这可以帮助您更好地理解自己的外交风格和在模联中可能发挥最佳效果的角色。
-    </p>
+    <div class="element">
+        <h2>开始测试</h2>
+        <p class="value-description">
+            测试包含多个精心设计的问题，每个问题都与特定的外交情境相关。请根据您的真实想法和判断来回答，这将帮助我们更准确地评估您的外交风格。
+        </p>
+        <p class="value-description">
+            完成测试后，您将获得：
+        </p>
+        <ul>
+            <li>六大维度的详细分析</li>
+            <li>最适合您的外交系统推荐</li>
+            <li>个性化的角色建议</li>
+        </ul>
+        <button class="button" onclick="location.href='instructions.html';" style="font-size: 36pt;">开始测试</button>
+    </div>
 
-    <h2>测试结果准确吗？</h2>
-    <p>本测试基于模联实践经验设计，但仍然是一个简化的模型。测试结果仅供参考，不应过分依赖。您的实际外交风格可能会随着经验积累和具体情境而变化。如果您对测试有任何建议或意见，欢迎在GitHub上讨论或提出问题。</p>
+    <div class="element">
+        <h2>关于测试</h2>
+        <p class="value-description">
+            本测试基于对模拟联合国各系统特点的深入研究，结合实际外交实践经验设计。测试结果将帮助您更好地了解自己的外交风格，为您的模联参与提供有价值的参考。
+        </p>
+        <p class="value-description" style="font-size: 16pt;">
+            版本：2.0.0 (2024-01)
+        </p>
+    </div>
 
-    <hr>
-    <img src="value_images/values.svg" class="center"></img>
-    <h2>隐私政策（中国大陆）</h2>
-    <p>请点击<a href="https://github.com/LiMinghan1220/8mun/blob/main/%E9%9A%90%E7%A7%81%E6%94%BF%E7%AD%96.md">这里</a>以查看
-    </p>
-
-    <!-- This is the script for the page itself -->
-    <script type="application/javascript" src="questions.js"></script>
-    <script type="text/javascript">
-        document.getElementById("numOfQuestions").innerHTML = questions.length;
-    </script>
+    <div class="element">
+        <h2>联系方式</h2>
+        <div class="contact-info">
+            <div class="contact-item">
+                <h3>微信</h3>
+                <img src="c98d5f5ba9f957bda285ede1ccd3deb.jpg" alt="WeChat QR Code" class="qr-code">
+            </div>
+            <div class="contact-item">
+                <h3>电子邮件</h3>
+                <p><a href="mailto:13hz@freedommmun.cn">13hz@freedommmun.cn</a></p>
+            </div>
+        </div>
+    </div>
 </body>

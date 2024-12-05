@@ -5,6 +5,40 @@
 <link rel="icon" type="x-icon" href="icon.png">
 <link rel="shortcut icon" type="x-icon" href="icon.png">
 <meta charset="utf-8">
+<script>
+    // 版本信息
+    const VERSION = "2.0.0";
+    const LAST_UPDATE = "2024-01";
+    
+    // 防止重复提交
+    let isProcessing = false;
+    const CLICK_DELAY = 500; // 点击延迟（毫秒）
+    
+    // 错误处理
+    function handleError(error) {
+        console.error("发生错误:", error);
+        alert("很抱歉，测试过程中出现错误。请刷新页面重试。");
+    }
+    
+    // 输入验证
+    function validateInput(value) {
+        if (value === null) return true; // 跳过按钮
+        return value >= -1.0 && value <= 1.0;
+    }
+    
+    // 防抖函数
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+</script>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({
@@ -31,112 +65,237 @@
 <h2 style="text-align:center;" id="question-number">加载中...</h2>
 <p class="question" id="question-text"></p>
 <div class="button-container">
-    <button class="button stronglyAgree" onclick="next_question(1.0)">强烈同意</button>
-    <button class="button agree" onclick="next_question(0.5)">同意</button>
-    <button class="button neutral" onclick="next_question(0)">中立/不确定</button>
-    <button class="button disagree" onclick="next_question(-0.5)">反对</button>
-    <button class="button stronglyDisagree" onclick="next_question(-1.0)">强烈反对</button>
+    <button class="button stronglyAgree" onclick="handleAnswer(1.0)">强烈同意</button>
+    <button class="button agree" onclick="handleAnswer(0.5)">同意</button>
+    <button class="button neutral" onclick="handleAnswer(0)">中立/不确定</button>
+    <button class="button disagree" onclick="handleAnswer(-0.5)">反对</button>
+    <button class="button stronglyDisagree" onclick="handleAnswer(-1.0)">强烈反对</button>
 </div>
 <div class="navigation-buttons">
     <button class="small_button" onclick="prev_question()" id="back_button">返回</button>
     <button class="small_button" onclick="next_question(null)" id="skip_button">跳过</button>
+    <button class="small_button" style="display: none;" id="back_button_off">返回</button>
 </div>
 
 <!-- JavaScript for the test itself -->
 <script>
-    var answers = new Array(questions.length);
-    var qn = 0;
-    var proc_score = 0;
-    var style_score = 0;
-    var soln_score = 0;
-    var interact_score = 0;
+    // 状态变量
+    let max_decision = 0;
+    let max_collab = 0;
+    let max_issue = 0;
+    let max_compromise = 0;
+    let max_comm = 0;
+    let max_solution = 0;
+
+    let decision = 0;
+    let collab = 0;
+    let issue = 0;
+    let compromise = 0;
+    let comm = 0;
+    let solution = 0;
+
+    let qn = 0;
+    let prev_answer = null;
+    
+    // 错误状态跟踪
+    let errorCount = 0;
+    const MAX_ERRORS = 3;
 
     function init_question() {
-        document.getElementById("question-text").innerHTML = questions[qn].question;
-        document.getElementById("question-number").innerHTML = "问题 " + (qn + 1) + " / " + questions.length;
-        if (qn == 0) {
-            document.getElementById("back_button").style.display = "none";
-        } else {
-            document.getElementById("back_button").style.display = "block";
+        try {
+            if (!questions || !questions[qn]) {
+                throw new Error("题目数据加载失败");
+            }
+            
+            document.getElementById("question-text").innerHTML = questions[qn].question;
+            document.getElementById("question-number").innerHTML = `${qn + 1} / ${questions.length} (版本 ${VERSION})`;
+            
+            // 更新返回按钮状态
+            const backButton = document.getElementById("back_button");
+            const backButtonOff = document.getElementById("back_button_off");
+            
+            if (prev_answer === null) {
+                backButton.style.display = 'none';
+                backButtonOff.style.display = 'block';
+            } else {
+                backButton.style.display = 'block';
+                backButtonOff.style.display = 'none';
+            }
+        } catch (error) {
+            handleError(error);
+        }
+    }
+
+    // 处理答案输入
+    function handleAnswer(mult) {
+        try {
+            if (isProcessing) return;
+            if (!validateInput(mult)) {
+                throw new Error("无效的输入值");
+            }
+            
+            isProcessing = true;
+            setTimeout(() => {
+                next_question(mult);
+                isProcessing = false;
+            }, CLICK_DELAY);
+        } catch (error) {
+            handleError(error);
+            isProcessing = false;
         }
     }
 
     function next_question(mult) {
-        if (mult !== null) {
-            answers[qn] = mult;
-            proc_score += mult * questions[qn].effect.proc;
-            style_score += mult * questions[qn].effect.style;
-            soln_score += mult * questions[qn].effect.soln;
-            interact_score += mult * questions[qn].effect.interact;
-        }
-        qn++;
-        if (qn < questions.length) {
-            init_question();
-        } else {
-            results();
-        }
-    }
-
-    function prev_question() {
-        if (qn > 0) {
-            qn--;
-            // 恢复上一题的分数
-            if (answers[qn] !== null && answers[qn] !== undefined) {
-                proc_score -= answers[qn] * questions[qn].effect.proc;
-                style_score -= answers[qn] * questions[qn].effect.style;
-                soln_score -= answers[qn] * questions[qn].effect.soln;
-                interact_score -= answers[qn] * questions[qn].effect.interact;
+        try {
+            if (!questions[qn] || !questions[qn].effect) {
+                throw new Error("题目数据无效");
             }
-            init_question();
+
+            // 计算最大分数
+            const effect = questions[qn].effect;
+            max_decision += Math.abs(effect.decision || 0);
+            max_collab += Math.abs(effect.collab || 0);
+            max_issue += Math.abs(effect.issue || 0);
+            max_compromise += Math.abs(effect.compromise || 0);
+            max_comm += Math.abs(effect.comm || 0);
+            max_solution += Math.abs(effect.solution || 0);
+
+            // 计算得分
+            if (mult !== null) {
+                decision += mult * (effect.decision || 0);
+                collab += mult * (effect.collab || 0);
+                issue += mult * (effect.issue || 0);
+                compromise += mult * (effect.compromise || 0);
+                comm += mult * (effect.comm || 0);
+                solution += mult * (effect.solution || 0);
+            }
+
+            prev_answer = mult;
+            qn++;
+
+            if (qn < questions.length) {
+                init_question();
+            } else {
+                results();
+            }
+        } catch (error) {
+            errorCount++;
+            if (errorCount >= MAX_ERRORS) {
+                handleError(new Error("测试出现多次错误，请刷新页面重新开始"));
+            } else {
+                handleError(error);
+            }
         }
     }
 
-    function calc_score(score, min, max) {
-        // 将分数映射到0-100的范围
-        return (((score - min) / (max - min)) * 100).toFixed(1);
+    // 优化的返回功能
+    function prev_question() {
+        try {
+            if (qn <= 0 || prev_answer === null) return;
+            
+            qn--;
+            // 撤销上一题的得分
+            const effect = questions[qn].effect;
+            if (prev_answer !== null) {
+                decision -= prev_answer * (effect.decision || 0);
+                collab -= prev_answer * (effect.collab || 0);
+                issue -= prev_answer * (effect.issue || 0);
+                compromise -= prev_answer * (effect.compromise || 0);
+                comm -= prev_answer * (effect.comm || 0);
+                solution -= prev_answer * (effect.solution || 0);
+            }
+            
+            prev_answer = null;
+            init_question();
+        } catch (error) {
+            handleError(error);
+        }
     }
 
+    // 计算得分
+    function calc_score(score, max) {
+        return (100 * (max + score) / (2 * max)).toFixed(1);
+    }
+
+    // 结果处理
     function results() {
         try {
-            // 根据score_analysis.txt中的实际范围
-            const ranges = {
-                proc: { min: -125, max: 215 },
-                style: { min: -110, max: 170 },
-                soln: { min: -75, max: 175 },
-                interact: { min: -70, max: 190 }
+            // 计算最终得分
+            let decisionScore = calc_score(decision, max_decision);
+            let collabScore = calc_score(collab, max_collab);
+            let issueScore = calc_score(issue, max_issue);
+            let compromiseScore = calc_score(compromise, max_compromise);
+            let commScore = calc_score(comm, max_comm);
+            let solutionScore = calc_score(solution, max_solution);
+
+            // 创建答题结果对象
+            const testResults = {
+                version: VERSION,
+                timestamp: new Date().toISOString(),
+                scores: {
+                    decision: decisionScore,
+                    collab: collabScore,
+                    issue: issueScore,
+                    compromise: compromiseScore,
+                    comm: commScore,
+                    solution: solutionScore
+                },
+                rawScores: {
+                    decision: decision,
+                    max_decision: max_decision,
+                    collab: collab,
+                    max_collab: max_collab,
+                    issue: issue,
+                    max_issue: max_issue,
+                    compromise: compromise,
+                    max_compromise: max_compromise,
+                    comm: comm,
+                    max_comm: max_comm,
+                    solution: solution,
+                    max_solution: max_solution
+                }
             };
 
-            // 计算百分比分数
-            var proc_percent = calc_score(proc_score, ranges.proc.min, ranges.proc.max);
-            var style_percent = calc_score(style_score, ranges.style.min, ranges.style.max);
-            var soln_percent = calc_score(soln_score, ranges.soln.min, ranges.soln.max);
-            var interact_percent = calc_score(interact_score, ranges.interact.min, ranges.interact.max);
+            // 将结果保存到localStorage（可选）
+            localStorage.setItem('munTestResults', JSON.stringify(testResults));
 
-            // 存储结果
-            localStorage.setItem("proc", proc_percent);
-            localStorage.setItem("style", style_percent);
-            localStorage.setItem("soln", soln_percent);
-            localStorage.setItem("interact", interact_percent);
+            // 构建URL参数
+            const params = new URLSearchParams({
+                decision: decisionScore,
+                collab: collabScore,
+                issue: issueScore,
+                compromise: compromiseScore,
+                comm: commScore,
+                solution: solutionScore,
+                results: encodeURIComponent(JSON.stringify(testResults))
+            });
 
             // 跳转到结果页面
-            location.href = `results.html?proc=${proc_percent}&style=${style_percent}&soln=${soln_percent}&interact=${interact_percent}`;
+            location.href = `results.html?${params.toString()}`;
         } catch (error) {
-            console.error("计算结果时出错:", error);
-            alert("计算结果时出现错误，请重试。");
+            handleError(error);
         }
     }
 
-    // 页面加载时初始化
+    // 页面加载完成后初始化
     window.onload = function() {
         try {
-            // 清除之前的答案
-            localStorage.clear();
-            // 初始化第一个问题
             init_question();
+            console.log(`测试版本: ${VERSION} (${LAST_UPDATE})`);
         } catch (error) {
-            console.error("初始化时出错:", error);
-            alert("初始化测试时出现错误，请刷新页面重试。");
+            handleError(error);
         }
-    }
+    };
+</script>
+<script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.0.0-beta.4/libs/cn/index.js"></script>
+<script>
+    new CozeWebSDK.WebChatClient({
+        config: {
+            bot_id: '7444808833103036435',
+        },
+        componentProps: {
+            title: 'Coze',
+        },
+    });
 </script>
 </body>

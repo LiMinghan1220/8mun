@@ -1,199 +1,343 @@
 <head>
-<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:400,700" rel="stylesheet">
-<link href='style.css' rel='stylesheet' type='text/css'>
-<title>模联风格测试结果</title>
-<link rel="icon" type="x-icon" href="icon.png">
-<link rel="shortcut icon" type="x-icon" href="icon.png">
-<meta charset="utf-8">
-<script>
-  version = "Test Edition #1" //Remember to update this before making changes to the test itself!
-</script>
-</head>
-<script type="application/javascript"
-        src="mun_ideologies.js">
-</script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5CTBKRVD08"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:400,700" rel="stylesheet">
+    <link href='style.css' rel='stylesheet' type='text/css'>
+    <title>模联风格测试结果</title>
+    <link rel="icon" type="x-icon" href="icon.png">
+    <link rel="shortcut icon" type="x-icon" href="icon.png">
+    <meta charset="utf-8">
+    <script type="application/javascript" src="mun_ideologies.js"></script>
+    <script>
+        // 声明全局变量
+        let decision = 0;
+        let collab = 0;
+        let issue = 0;
+        let compromise = 0;
+        let comm = 0;
+        let solution = 0;
 
-  gtag('config', 'G-5CTBKRVD08');
-</script>
-<!-- Clarity tracking code for https://songyon.github.io/8valuescn/ -->
+        version = "Test Edition #1" //Remember to update this before making changes to the test itself!
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5CTBKRVD08"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-5CTBKRVD08');
+    </script>
+    <!-- Clarity tracking code for https://songyon.github.io/8valuescn/ -->
+
 <body>
-<div class="center">
-    <h1>模联风格测试结果</h1>
-    <hr>
-    
-    <h2>程序性 (Procedure) <span class="weight-300" id="proc-label"></span></h2>
-    <div class="axis">
-        <img id="img-proc" src="mun_images/formal.svg" height="128pt"/>
-        <div class="bar-container">
-            <div class="bar proc" id="bar-proc">
-                <div class="text-wrapper" id="proc"></div>
+    <div class="center">
+        <h1>模联风格测试结果</h1>
+        <hr>
+
+        <h2>决策逻辑 (Decision Logic) <span class="weight-300" id="decision-label"></span></h2>
+        <div class="axis">
+            <img id="img-decision" src="mun_images/formal.svg" height="128pt" />
+            <div class="bar-container">
+                <div class="bar decision" id="bar-decision">
+                    <div class="text-wrapper" id="decision"></div>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <h2>风格 (Style) <span class="weight-300" id="style-label"></span></h2>
-    <div class="axis">
-        <img id="img-style" src="mun_images/diplomatic.svg" height="128pt"/>
-        <div class="bar-container">
-            <div class="bar style" id="bar-style">
-                <div class="text-wrapper" id="style"></div>
+
+        <h2>协作方式 (Collaboration Style) <span class="weight-300" id="collab-label"></span></h2>
+        <div class="axis">
+            <img id="img-collab" src="mun_images/diplomatic.svg" height="128pt" />
+            <div class="bar-container">
+                <div class="bar collab" id="bar-collab">
+                    <div class="text-wrapper" id="collab"></div>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <h2>解决方案 (Solution) <span class="weight-300" id="soln-label"></span></h2>
-    <div class="axis">
-        <img id="img-soln" src="mun_images/systematic.svg" height="128pt"/>
-        <div class="bar-container">
-            <div class="bar soln" id="bar-soln">
-                <div class="text-wrapper" id="soln"></div>
+
+        <h2>问题关注 (Issue Focus) <span class="weight-300" id="issue-label"></span></h2>
+        <div class="axis">
+            <img id="img-issue" src="mun_images/solution.svg" height="128pt" />
+            <div class="bar-container">
+                <div class="bar issue" id="bar-issue">
+                    <div class="text-wrapper" id="issue"></div>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <h2>互动性 (Interaction) <span class="weight-300" id="interact-label"></span></h2>
-    <div class="axis">
-        <img id="img-interact" src="mun_images/multilateral.svg" height="128pt"/>
-        <div class="bar-container">
-            <div class="bar interact" id="bar-interact">
-                <div class="text-wrapper" id="interact"></div>
+
+        <h2>妥协能力 (Compromise Capacity) <span class="weight-300" id="compromise-label"></span></h2>
+        <div class="axis">
+            <img id="img-compromise" src="mun_images/interact.svg" height="128pt" />
+            <div class="bar-container">
+                <div class="bar compromise" id="bar-compromise">
+                    <div class="text-wrapper" id="compromise"></div>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <h2>最接近的外交体系: <span class="weight-300" id="ideology-label"></span></h2>
-    <p class="ideology-description" id="ideology-desc"></p>
-    
-    <div class="button-container">
-        <button class="button" onclick="location.href='index.html';">返回首页</button>
-        <button class="button" onclick="location.href='quiz.html';">重新测试</button>
-    </div>
-</div>
 
-<script>
-function getQueryVariable(variable) {
-    var query = window.location.search.substring(1);
-    var vars = query.split('&');
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split('=');
-        if (pair[0] === variable) {
-            return pair[1];
-        }
-    }
-    return 0;
-}
+        <h2>沟通风格 (Communication Style) <span class="weight-300" id="comm-label"></span></h2>
+        <div class="axis">
+            <img id="img-comm" src="mun_images/agenda.svg" height="128pt" />
+            <div class="bar-container">
+                <div class="bar comm" id="bar-comm">
+                    <div class="text-wrapper" id="comm"></div>
+                </div>
+            </div>
+        </div>
 
-function setBarValue(name, value) {
-    var bar = document.getElementById(`bar-${name}`);
-    var text = document.getElementById(name);
-    if (bar && text) {
-        // 确保值在0-100之间
-        value = Math.max(0, Math.min(100, value));
-        // 设置进度条宽度
-        bar.style.width = value + "%";
-        // 设置文本内容
-        text.innerHTML = Math.round(value) + "%";
-    }
-}
+        <h2>解决创新 (Solution Innovation) <span class="weight-300" id="solution-label"></span></h2>
+        <div class="axis">
+            <img id="img-solution" src="mun_images/creativity.svg" height="128pt" />
+            <div class="bar-container">
+                <div class="bar solution" id="bar-solution">
+                    <div class="text-wrapper" id="solution"></div>
+                </div>
+            </div>
+        </div>
 
-function setLabel(name, value) {
-    var label = document.getElementById(`${name}-label`);
-    if (label) {
-        if (value > 75) {
-            label.innerHTML = "很高";
-        } else if (value > 60) {
-            label.innerHTML = "偏高";
-        } else if (value > 40) {
-            label.innerHTML = "中等";
-        } else if (value > 25) {
-            label.innerHTML = "偏低";
-        } else {
-            label.innerHTML = "很低";
-        }
-    }
-}
+        <div id="results"></div>
 
-function findMatchingIdeology(proc, style, soln, interact) {
-    let bestMatch = null;
-    let smallestDifference = Infinity;
-    
-    // 为每个维度分配权重
-    const weights = {
-        proc: 1.0,
-        style: 1.0,
-        soln: 1.0,
-        interact: 1.0
-    };
-    
-    for (let ideology of ideologies) {
-        // 计算加权欧几里得距离
-        const difference = Math.sqrt(
-            weights.proc * Math.pow(proc - ideology.stats.proc, 2) +
-            weights.style * Math.pow(style - ideology.stats.style, 2) +
-            weights.soln * Math.pow(soln - ideology.stats.soln, 2) +
-            weights.interact * Math.pow(interact - ideology.stats.interact, 2)
-        );
-        
-        if (difference < smallestDifference) {
-            smallestDifference = difference;
-            bestMatch = ideology;
-        }
-    }
-    
-    return bestMatch;
-}
+        <div class="element">
+            <div class="button-container">
+                <button class="button" onclick="location.href='quiz.html';">重新测试</button>
+                <button class="button" onclick="location.href='index.html';">返回首页</button>
+            </div>
+        </div>
 
-window.onload = function() {
-    try {
-        // 获取分数
-        var proc = parseFloat(getQueryVariable("proc"));
-        var style = parseFloat(getQueryVariable("style"));
-        var soln = parseFloat(getQueryVariable("soln"));
-        var interact = parseFloat(getQueryVariable("interact"));
+        <script>
+            function getQueryVariable(variable) {
+                try {
+                    const query = window.location.search.substring(1);
+                    console.log('URL查询字符串:', query);
 
-        // 检查分数是否有效
-        if (isNaN(proc) || isNaN(style) || isNaN(soln) || isNaN(interact)) {
-            throw new Error("无效的分数值");
-        }
+                    const vars = query.split('&');
+                    console.log('查询参数列表:', vars);
 
-        // 检查分数范围
-        if (proc < 0 || proc > 100 || style < 0 || style > 100 || 
-            soln < 0 || soln > 100 || interact < 0 || interact > 100) {
-            throw new Error("分数超出有效范围");
-        }
+                    for (let i = 0; i < vars.length; i++) {
+                        const pair = vars[i].split('=');
+                        if (pair[0] === variable) {
+                            console.log(`找到参数 ${variable}:`, pair[1]);
+                            return parseFloat(pair[1]);
+                        }
+                    }
+                    console.warn(`未找到参数 ${variable}`);
+                    return 0;
+                } catch (error) {
+                    console.error('获取URL参数时出错:', error);
+                    return 0;
+                }
+            }
 
-        // 设置进度条和标签
-        setBarValue("proc", proc);
-        setBarValue("style", style);
-        setBarValue("soln", soln);
-        setBarValue("interact", interact);
-        
-        setLabel("proc", proc);
-        setLabel("style", style);
-        setLabel("soln", soln);
-        setLabel("interact", interact);
-        
-        // 找到最匹配的意识形态
-        var matchingIdeology = findMatchingIdeology(proc, style, soln, interact);
-        if (!matchingIdeology) {
-            throw new Error("未找到匹配的外交体系");
-        }
+            function setBarValue(name, value) {
+                const bar = document.getElementById(`bar-${name}`);
+                if (bar) {
+                    bar.style.width = value + "%";
+                    const textWrapper = bar.querySelector('.text-wrapper');
+                    if (textWrapper) {
+                        textWrapper.textContent = value + "%";
+                    }
+                }
+            }
 
-        document.getElementById("ideology-label").innerHTML = matchingIdeology.name;
-        document.getElementById("ideology-desc").innerHTML = matchingIdeology.desc;
-        
-    } catch (error) {
-        console.error("显示结果时出错:", error);
-        alert("显示结果时出现错误，请重试测试。");
-        // 重定向回测试页面
-        window.location.href = 'quiz.html';
-    }
-}
-</script>
+            function setLabel(name, value) {
+                const label = document.getElementById(`${name}-label`);
+                if (label) {
+                    let labelText = "";
+                    switch (name) {
+                        case "decision":
+                            labelText = value > 50 ? "规则导向" : "灵活应变";
+                            break;
+                        case "collab":
+                            labelText = value > 50 ? "多边合作" : "单边行动";
+                            break;
+                        case "issue":
+                            labelText = value > 50 ? "长期视角" : "短期目标";
+                            break;
+                        case "compromise":
+                            labelText = value > 50 ? "高度妥协" : "坚持立场";
+                            break;
+                        case "comm":
+                            labelText = value > 50 ? "正式沟通" : "非正式沟通";
+                            break;
+                        case "solution":
+                            labelText = value > 50 ? "创新优先" : "传统方案";
+                            break;
+                    }
+                    label.textContent = `(${labelText}: ${value}%)`;
+                }
+            }
+
+            function calculateMatchScore(userStats, systemStats) {
+                let totalDiff = 0;
+                let dimensions = 0;
+
+                // 计算每个维度的差异
+                for (const dim in userStats) {
+                    if (systemStats[dim] !== undefined && userStats[dim] !== undefined) {
+                        // 计算差异值（0-1范围）
+                        const diff = Math.abs(userStats[dim] - systemStats[dim]);
+                        totalDiff += diff;
+                        dimensions++;
+                    }
+                }
+
+                // 计算平均差异
+                const avgDiff = totalDiff / dimensions;
+
+                // 转换为相似度分数（0-100范围）
+                // 差异越小，分数越高
+                return Math.round((1 - avgDiff) * 100);
+            }
+
+            function findBestMatches(userStats) {
+                const allMatches = [];
+
+                // 处理所有系统
+                ideologies.forEach(system => {
+                    // 计算主系统的匹配分数
+                    const systemScore = calculateMatchScore(userStats, system.stats);
+                    allMatches.push({
+                        name: system.name,
+                        score: systemScore,
+                        desc: system.desc
+                    });
+
+                    // 处理子系统
+                    if (system.children) {
+                        system.children.forEach(child => {
+                            const childScore = calculateMatchScore(userStats, child.stats);
+                            allMatches.push({
+                                name: child.name,
+                                parentSystem: system.name,
+                                score: childScore,
+                                desc: child.desc
+                            });
+                        });
+                    }
+
+                    // 处理子系统（某些系统使用 subsystems 而不是 children）
+                    if (system.subsystems) {
+                        system.subsystems.forEach(subsystem => {
+                            const subsystemScore = calculateMatchScore(userStats, subsystem.stats);
+                            allMatches.push({
+                                name: subsystem.name,
+                                parentSystem: system.name,
+                                score: subsystemScore,
+                                desc: subsystem.desc
+                            });
+                        });
+                    }
+                });
+
+                // 按分数排序
+                allMatches.sort((a, b) => b.score - a.score);
+
+                // 分离主要结果和次要结果
+                const mainResult = allMatches[0];
+                const secondaryResults = allMatches.slice(1, 4);
+
+                return {
+                    mainResult,
+                    secondaryResults
+                };
+            }
+
+            function displayResults() {
+                try {
+                    const userStats = {
+                        decision: parseFloat(decision) / 100,    // 转换为0到1的范围
+                        collab: parseFloat(collab) / 100,
+                        issue: parseFloat(issue) / 100,
+                        compromise: parseFloat(compromise) / 100,
+                        comm: parseFloat(comm) / 100,
+                        solution: parseFloat(solution) / 100
+                    };
+
+                    const matches = findBestMatches(userStats);
+
+                    // 构建结果HTML
+                    let resultsHtml = `
+                <div class="results-section">
+                    <div class="main-result">
+                        <h2>最适合的委员会</h2>
+                        <div class="match-card primary">
+                            <div class="match-header">
+                                <h3>${matches.mainResult.parentSystem ? matches.mainResult.parentSystem + ' - ' : ''}${matches.mainResult.name}</h3>
+                                <div class="match-score primary">匹配度：${matches.mainResult.score}%</div>
+                            </div>
+                            <p class="match-description">${matches.mainResult.desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="secondary-results">
+                        <h2>其他推荐委员会</h2>
+                        <div class="matches-grid">`;
+
+                    matches.secondaryResults.forEach(match => {
+                        resultsHtml += `
+                    <div class="match-card secondary">
+                        <div class="match-header">
+                            <h3>${match.parentSystem ? match.parentSystem + ' - ' : ''}${match.name}</h3>
+                            <div class="match-score secondary">匹配度：${match.score}%</div>
+                        </div>
+                        <p class="match-description">${match.desc}</p>
+                    </div>`;
+                    });
+
+                    resultsHtml += `
+                        </div>
+                    </div>
+                </div>`;
+
+                    document.getElementById("results").innerHTML = resultsHtml;
+                } catch (error) {
+                    console.error('显示结果时出错:', error);
+                    document.getElementById("results").innerHTML = '<p class="error">抱歉，计算结果时出现错误。</p>';
+                }
+            }
+
+            function onload() {
+                try {
+                    console.log('页面开始加载');
+
+                    // 获取URL参数
+                    decision = getQueryVariable("decision");
+                    collab = getQueryVariable("collab");
+                    issue = getQueryVariable("issue");
+                    compromise = getQueryVariable("compromise");
+                    comm = getQueryVariable("comm");
+                    solution = getQueryVariable("solution");
+
+                    console.log('获取到的参数值:', {
+                        decision, collab, issue, compromise, comm, solution
+                    });
+
+                    // 更新显示
+                    setBarValue("decision", decision);
+                    setBarValue("collab", collab);
+                    setBarValue("issue", issue);
+                    setBarValue("compromise", compromise);
+                    setBarValue("comm", comm);
+                    setBarValue("solution", solution);
+
+                    // 设置标签
+                    setLabel("decision", decision);
+                    setLabel("collab", collab);
+                    setLabel("issue", issue);
+                    setLabel("compromise", compromise);
+                    setLabel("comm", comm);
+                    setLabel("solution", solution);
+
+                    // 显示匹配结果
+                    displayResults();
+                    console.log('页面加载完成');
+                } catch (error) {
+                    console.error('页面加载时出错:', error);
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', onload);
+            } else {
+                onload();
+            }
+        </script>
 </body>
