@@ -1,0 +1,142 @@
+<head>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:400,700" rel="stylesheet">
+<link href='style.css' rel='stylesheet' type='text/css'>
+<title>模联风格测试</title>
+<link rel="icon" type="x-icon" href="icon.png">
+<link rel="shortcut icon" type="x-icon" href="icon.png">
+<meta charset="utf-8">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-45340418289011776",
+    enable_page_level_ads: true
+  });
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5CTBKRVD08"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5CTBKRVD08');
+</script>
+<!-- Clarity tracking code for https://songyon.github.io/8valuescn/ -->
+</head>
+<body>
+<script type="application/javascript" src="mun_questions.js"></script>
+<script type="application/javascript" src="mun_ideologies.js"></script>
+<h1>模联风格测试</h1>
+<hr>
+<h2 style="text-align:center;" id="question-number">加载中...</h2>
+<p class="question" id="question-text"></p>
+<div class="button-container">
+    <button class="button stronglyAgree" onclick="next_question(1.0)">强烈同意</button>
+    <button class="button agree" onclick="next_question(0.5)">同意</button>
+    <button class="button neutral" onclick="next_question(0)">中立/不确定</button>
+    <button class="button disagree" onclick="next_question(-0.5)">反对</button>
+    <button class="button stronglyDisagree" onclick="next_question(-1.0)">强烈反对</button>
+</div>
+<div class="navigation-buttons">
+    <button class="small_button" onclick="prev_question()" id="back_button">返回</button>
+    <button class="small_button" onclick="next_question(null)" id="skip_button">跳过</button>
+</div>
+
+<!-- JavaScript for the test itself -->
+<script>
+    var answers = new Array(questions.length);
+    var qn = 0;
+    var proc_score = 0;
+    var style_score = 0;
+    var soln_score = 0;
+    var interact_score = 0;
+
+    function init_question() {
+        document.getElementById("question-text").innerHTML = questions[qn].question;
+        document.getElementById("question-number").innerHTML = "问题 " + (qn + 1) + " / " + questions.length;
+        if (qn == 0) {
+            document.getElementById("back_button").style.display = "none";
+        } else {
+            document.getElementById("back_button").style.display = "block";
+        }
+    }
+
+    function next_question(mult) {
+        if (mult !== null) {
+            answers[qn] = mult;
+            proc_score += mult * questions[qn].effect.proc;
+            style_score += mult * questions[qn].effect.style;
+            soln_score += mult * questions[qn].effect.soln;
+            interact_score += mult * questions[qn].effect.interact;
+        }
+        qn++;
+        if (qn < questions.length) {
+            init_question();
+        } else {
+            results();
+        }
+    }
+
+    function prev_question() {
+        if (qn > 0) {
+            qn--;
+            // 恢复上一题的分数
+            if (answers[qn] !== null && answers[qn] !== undefined) {
+                proc_score -= answers[qn] * questions[qn].effect.proc;
+                style_score -= answers[qn] * questions[qn].effect.style;
+                soln_score -= answers[qn] * questions[qn].effect.soln;
+                interact_score -= answers[qn] * questions[qn].effect.interact;
+            }
+            init_question();
+        }
+    }
+
+    function calc_score(score, min, max) {
+        // 将分数映射到0-100的范围
+        return (((score - min) / (max - min)) * 100).toFixed(1);
+    }
+
+    function results() {
+        try {
+            // 根据score_analysis.txt中的实际范围
+            const ranges = {
+                proc: { min: -125, max: 215 },
+                style: { min: -110, max: 170 },
+                soln: { min: -75, max: 175 },
+                interact: { min: -70, max: 190 }
+            };
+
+            // 计算百分比分数
+            var proc_percent = calc_score(proc_score, ranges.proc.min, ranges.proc.max);
+            var style_percent = calc_score(style_score, ranges.style.min, ranges.style.max);
+            var soln_percent = calc_score(soln_score, ranges.soln.min, ranges.soln.max);
+            var interact_percent = calc_score(interact_score, ranges.interact.min, ranges.interact.max);
+
+            // 存储结果
+            localStorage.setItem("proc", proc_percent);
+            localStorage.setItem("style", style_percent);
+            localStorage.setItem("soln", soln_percent);
+            localStorage.setItem("interact", interact_percent);
+
+            // 跳转到结果页面
+            location.href = `results.html?proc=${proc_percent}&style=${style_percent}&soln=${soln_percent}&interact=${interact_percent}`;
+        } catch (error) {
+            console.error("计算结果时出错:", error);
+            alert("计算结果时出现错误，请重试。");
+        }
+    }
+
+    // 页面加载时初始化
+    window.onload = function() {
+        try {
+            // 清除之前的答案
+            localStorage.clear();
+            // 初始化第一个问题
+            init_question();
+        } catch (error) {
+            console.error("初始化时出错:", error);
+            alert("初始化测试时出现错误，请刷新页面重试。");
+        }
+    }
+</script>
+</body>

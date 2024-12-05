@@ -1,0 +1,199 @@
+<head>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:400,700" rel="stylesheet">
+<link href='style.css' rel='stylesheet' type='text/css'>
+<title>模联风格测试结果</title>
+<link rel="icon" type="x-icon" href="icon.png">
+<link rel="shortcut icon" type="x-icon" href="icon.png">
+<meta charset="utf-8">
+<script>
+  version = "Test Edition #1" //Remember to update this before making changes to the test itself!
+</script>
+</head>
+<script type="application/javascript"
+        src="mun_ideologies.js">
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5CTBKRVD08"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5CTBKRVD08');
+</script>
+<!-- Clarity tracking code for https://songyon.github.io/8valuescn/ -->
+<body>
+<div class="center">
+    <h1>模联风格测试结果</h1>
+    <hr>
+    
+    <h2>程序性 (Procedure) <span class="weight-300" id="proc-label"></span></h2>
+    <div class="axis">
+        <img id="img-proc" src="mun_images/formal.svg" height="128pt"/>
+        <div class="bar-container">
+            <div class="bar proc" id="bar-proc">
+                <div class="text-wrapper" id="proc"></div>
+            </div>
+        </div>
+    </div>
+    
+    <h2>风格 (Style) <span class="weight-300" id="style-label"></span></h2>
+    <div class="axis">
+        <img id="img-style" src="mun_images/diplomatic.svg" height="128pt"/>
+        <div class="bar-container">
+            <div class="bar style" id="bar-style">
+                <div class="text-wrapper" id="style"></div>
+            </div>
+        </div>
+    </div>
+    
+    <h2>解决方案 (Solution) <span class="weight-300" id="soln-label"></span></h2>
+    <div class="axis">
+        <img id="img-soln" src="mun_images/systematic.svg" height="128pt"/>
+        <div class="bar-container">
+            <div class="bar soln" id="bar-soln">
+                <div class="text-wrapper" id="soln"></div>
+            </div>
+        </div>
+    </div>
+    
+    <h2>互动性 (Interaction) <span class="weight-300" id="interact-label"></span></h2>
+    <div class="axis">
+        <img id="img-interact" src="mun_images/multilateral.svg" height="128pt"/>
+        <div class="bar-container">
+            <div class="bar interact" id="bar-interact">
+                <div class="text-wrapper" id="interact"></div>
+            </div>
+        </div>
+    </div>
+    
+    <h2>最接近的外交体系: <span class="weight-300" id="ideology-label"></span></h2>
+    <p class="ideology-description" id="ideology-desc"></p>
+    
+    <div class="button-container">
+        <button class="button" onclick="location.href='index.html';">返回首页</button>
+        <button class="button" onclick="location.href='quiz.html';">重新测试</button>
+    </div>
+</div>
+
+<script>
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (pair[0] === variable) {
+            return pair[1];
+        }
+    }
+    return 0;
+}
+
+function setBarValue(name, value) {
+    var bar = document.getElementById(`bar-${name}`);
+    var text = document.getElementById(name);
+    if (bar && text) {
+        // 确保值在0-100之间
+        value = Math.max(0, Math.min(100, value));
+        // 设置进度条宽度
+        bar.style.width = value + "%";
+        // 设置文本内容
+        text.innerHTML = Math.round(value) + "%";
+    }
+}
+
+function setLabel(name, value) {
+    var label = document.getElementById(`${name}-label`);
+    if (label) {
+        if (value > 75) {
+            label.innerHTML = "很高";
+        } else if (value > 60) {
+            label.innerHTML = "偏高";
+        } else if (value > 40) {
+            label.innerHTML = "中等";
+        } else if (value > 25) {
+            label.innerHTML = "偏低";
+        } else {
+            label.innerHTML = "很低";
+        }
+    }
+}
+
+function findMatchingIdeology(proc, style, soln, interact) {
+    let bestMatch = null;
+    let smallestDifference = Infinity;
+    
+    // 为每个维度分配权重
+    const weights = {
+        proc: 1.0,
+        style: 1.0,
+        soln: 1.0,
+        interact: 1.0
+    };
+    
+    for (let ideology of ideologies) {
+        // 计算加权欧几里得距离
+        const difference = Math.sqrt(
+            weights.proc * Math.pow(proc - ideology.stats.proc, 2) +
+            weights.style * Math.pow(style - ideology.stats.style, 2) +
+            weights.soln * Math.pow(soln - ideology.stats.soln, 2) +
+            weights.interact * Math.pow(interact - ideology.stats.interact, 2)
+        );
+        
+        if (difference < smallestDifference) {
+            smallestDifference = difference;
+            bestMatch = ideology;
+        }
+    }
+    
+    return bestMatch;
+}
+
+window.onload = function() {
+    try {
+        // 获取分数
+        var proc = parseFloat(getQueryVariable("proc"));
+        var style = parseFloat(getQueryVariable("style"));
+        var soln = parseFloat(getQueryVariable("soln"));
+        var interact = parseFloat(getQueryVariable("interact"));
+
+        // 检查分数是否有效
+        if (isNaN(proc) || isNaN(style) || isNaN(soln) || isNaN(interact)) {
+            throw new Error("无效的分数值");
+        }
+
+        // 检查分数范围
+        if (proc < 0 || proc > 100 || style < 0 || style > 100 || 
+            soln < 0 || soln > 100 || interact < 0 || interact > 100) {
+            throw new Error("分数超出有效范围");
+        }
+
+        // 设置进度条和标签
+        setBarValue("proc", proc);
+        setBarValue("style", style);
+        setBarValue("soln", soln);
+        setBarValue("interact", interact);
+        
+        setLabel("proc", proc);
+        setLabel("style", style);
+        setLabel("soln", soln);
+        setLabel("interact", interact);
+        
+        // 找到最匹配的意识形态
+        var matchingIdeology = findMatchingIdeology(proc, style, soln, interact);
+        if (!matchingIdeology) {
+            throw new Error("未找到匹配的外交体系");
+        }
+
+        document.getElementById("ideology-label").innerHTML = matchingIdeology.name;
+        document.getElementById("ideology-desc").innerHTML = matchingIdeology.desc;
+        
+    } catch (error) {
+        console.error("显示结果时出错:", error);
+        alert("显示结果时出现错误，请重试测试。");
+        // 重定向回测试页面
+        window.location.href = 'quiz.html';
+    }
+}
+</script>
+</body>
