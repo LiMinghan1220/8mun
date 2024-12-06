@@ -169,70 +169,181 @@
                 let totalDiff = 0;
                 let dimensions = 0;
 
-                // 计算每个维度的差异
+                // 计算每个维度的差异（所有值都已经在0-1范围内）
                 for (const dim in userStats) {
                     if (systemStats[dim] !== undefined && userStats[dim] !== undefined) {
-                        // 计算差异值（0-1范围）
                         const diff = Math.abs(userStats[dim] - systemStats[dim]);
                         totalDiff += diff;
                         dimensions++;
                     }
                 }
 
-                // 计算平均差异
-                const avgDiff = totalDiff / dimensions;
+                // 计算平均差异并转换为相似度分数
+                const avgDiff = dimensions > 0 ? totalDiff / dimensions : 1;
+                return (1 - avgDiff).toFixed(3);
+            }
 
-                // 转换为相似度分数（0-100范围）
-                // 差异越小，分数越高
-                return Math.round((1 - avgDiff) * 100);
+            function displayResults() {
+                try {
+                    // 标准化所有分数
+                    const userStats = {
+                        decision: normalizeScore(parseFloat(decision), 'decision'),
+                        collab: normalizeScore(parseFloat(collab), 'collab'),
+                        issue: normalizeScore(parseFloat(issue), 'issue'),
+                        compromise: normalizeScore(parseFloat(compromise), 'compromise'),
+                        comm: normalizeScore(parseFloat(comm), 'comm'),
+                        solution: normalizeScore(parseFloat(solution), 'solution')
+                    };
+
+                    // 设置进度条和标签（显示为百分比）
+                    for (let [key, value] of Object.entries(userStats)) {
+                        setBarValue(key, (value * 100).toFixed(1));
+                        setLabel(key, (value * 100).toFixed(1));
+                    }
+
+                    const matches = findBestMatches(userStats);
+
+                    // 构建结果HTML
+                    let resultsHtml = `
+                        <div class="results-section">
+                            <div class="main-result">
+                                <h2>最佳匹配委员会</h2>
+                                <div class="match-card primary">
+                                    <div class="match-header">
+                                        <h3>${matches.mainResult.parentSystem ? matches.mainResult.parentSystem + ' - ' : ''}${matches.mainResult.name}</h3>
+                                        <div class="match-score primary">
+                                            <div class="score-circle">${(matches.mainResult.score * 100).toFixed(1)}%</div>
+                                        </div>
+                                    </div>
+                                    <p class="match-description">${matches.mainResult.desc}</p>`;
+
+                    // 只有当主要匹配结果有stats属性时才显示详细统计
+                    if (matches.mainResult.stats) {
+                        resultsHtml += `
+                                    <div class="match-stats">
+                                        <div class="stat-item ${Math.abs(userStats.decision - matches.mainResult.stats.decision) < 0.2 ? 'highlight' : ''}">
+                                            决策风格：${matches.mainResult.stats.decision > 0.5 ? '规则导向' : '灵活应变'}
+                                        </div>
+                                        <div class="stat-item ${Math.abs(userStats.collab - matches.mainResult.stats.collab) < 0.2 ? 'highlight' : ''}">
+                                            协作方式：${matches.mainResult.stats.collab > 0.5 ? '多边合作' : '单边行动'}
+                                        </div>
+                                        <div class="stat-item ${Math.abs(userStats.issue - matches.mainResult.stats.issue) < 0.2 ? 'highlight' : ''}">
+                                            问题关注：${matches.mainResult.stats.issue > 0.5 ? '长期视角' : '短期目标'}
+                                        </div>
+                                    </div>`;
+                    }
+
+                    resultsHtml += `
+                                </div>
+                            </div>
+
+                            <div class="secondary-results">
+                                <h2>其他推荐委员会</h2>
+                                <div class="matches-grid">`;
+
+                    matches.secondaryResults.forEach(match => {
+                        resultsHtml += `
+                            <div class="match-card secondary">
+                                <div class="match-header">
+                                    <h3>${match.parentSystem ? match.parentSystem + ' - ' : ''}${match.name}</h3>
+                                    <div class="match-score secondary">
+                                        <div class="score-circle">${(match.score * 100).toFixed(1)}%</div>
+                                    </div>
+                                </div>
+                                <p class="match-description">${match.desc}</p>`;
+                        
+                        // 只在有stats属性时显示最匹配特征
+                        if (match.stats) {
+                            resultsHtml += `
+                                <div class="match-highlight">
+                                    最匹配特征：${getHighlightFeature(userStats, match.stats)}
+                                </div>`;
+                        }
+
+                        resultsHtml += `
+                            </div>`;
+                    });
+
+                    resultsHtml += `
+                                </div>
+                            </div>
+                        </div>`;
+
+                    document.getElementById("results").innerHTML = resultsHtml;
+                } catch (error) {
+                    console.error('显示结果时出错:', error);
+                    document.getElementById("results").innerHTML = '<p class="error">抱歉，计算结果时出现错误。</p>';
+                }
             }
 
             function findBestMatches(userStats) {
                 const allMatches = [];
+                const systemGroups = new Map();
 
-                // 处理所有系统
                 ideologies.forEach(system => {
-                    // 计算主系统的匹配分数
+                    const matches = [];
+                    
                     const systemScore = calculateMatchScore(userStats, system.stats);
-                    allMatches.push({
+                    matches.push({
                         name: system.name,
-                        score: systemScore,
-                        desc: system.desc
+                        score: parseFloat(systemScore), // 确保分数是数字
+                        desc: system.desc,
+                        stats: system.stats,
+                        isMainSystem: true
                     });
 
-                    // 处理子系统
                     if (system.children) {
                         system.children.forEach(child => {
                             const childScore = calculateMatchScore(userStats, child.stats);
-                            allMatches.push({
+                            matches.push({
                                 name: child.name,
                                 parentSystem: system.name,
-                                score: childScore,
-                                desc: child.desc
+                                score: parseFloat(childScore), // 确保分数是数字
+                                desc: child.desc,
+                                stats: child.stats,
+                                isMainSystem: false
                             });
                         });
                     }
 
-                    // 处理子系统（某些系统使用 subsystems 而不是 children）
-                    if (system.subsystems) {
-                        system.subsystems.forEach(subsystem => {
-                            const subsystemScore = calculateMatchScore(userStats, subsystem.stats);
-                            allMatches.push({
-                                name: subsystem.name,
-                                parentSystem: system.name,
-                                score: subsystemScore,
-                                desc: subsystem.desc
-                            });
-                        });
-                    }
+                    matches.sort((a, b) => b.score - a.score);
+                    
+                    systemGroups.set(system.name, {
+                        topScore: matches[0].score,
+                        matches: matches
+                    });
+                    
+                    allMatches.push(...matches);
                 });
 
-                // 按分数排序
                 allMatches.sort((a, b) => b.score - a.score);
 
-                // 分离主要结果和次要结果
                 const mainResult = allMatches[0];
-                const secondaryResults = allMatches.slice(1, 4);
+                const secondaryResults = [];
+                const usedSystems = new Set([mainResult.parentSystem || mainResult.name]);
+                
+                for (const [systemName, group] of systemGroups) {
+                    if (!usedSystems.has(systemName) && secondaryResults.length < 3) {
+                        const bestMatch = group.matches[0];
+                        if (bestMatch.score > 0.6) { // 修改为0-1范围的阈值
+                            secondaryResults.push(bestMatch);
+                            usedSystems.add(systemName);
+                        }
+                    }
+                }
+
+                while (secondaryResults.length < 3) {
+                    for (const match of allMatches) {
+                        if (!usedSystems.has(match.parentSystem || match.name) && 
+                            match !== mainResult && 
+                            match.score > 0.5) { // 修改为0-1范围的阈值
+                            secondaryResults.push(match);
+                            usedSystems.add(match.parentSystem || match.name);
+                            if (secondaryResults.length >= 3) break;
+                        }
+                    }
+                    break;
+                }
 
                 return {
                     mainResult,
@@ -240,58 +351,54 @@
                 };
             }
 
-            function displayResults() {
-                try {
-                    const userStats = {
-                        decision: parseFloat(decision) / 100,    // 转换为0到1的范围
-                        collab: parseFloat(collab) / 100,
-                        issue: parseFloat(issue) / 100,
-                        compromise: parseFloat(compromise) / 100,
-                        comm: parseFloat(comm) / 100,
-                        solution: parseFloat(solution) / 100
-                    };
+            function getHighlightFeature(userStats, systemStats) {
+                // 如果没有统计数据，返回空字符串
+                if (!systemStats) return '';
 
-                    const matches = findBestMatches(userStats);
+                const features = {
+                    decision: '决策逻辑',
+                    collab: '协作方式',
+                    issue: '问题关注',
+                    compromise: '妥协能力',
+                    comm: '沟通风格',
+                    solution: '解决创新'
+                };
 
-                    // 构建结果HTML
-                    let resultsHtml = `
-                <div class="results-section">
-                    <div class="main-result">
-                        <h2>最适合的委员会</h2>
-                        <div class="match-card primary">
-                            <div class="match-header">
-                                <h3>${matches.mainResult.parentSystem ? matches.mainResult.parentSystem + ' - ' : ''}${matches.mainResult.name}</h3>
-                                <div class="match-score primary">匹配度：${matches.mainResult.score}%</div>
-                            </div>
-                            <p class="match-description">${matches.mainResult.desc}</p>
-                        </div>
-                    </div>
+                let bestMatch = {
+                    feature: '',
+                    diff: 1
+                };
 
-                    <div class="secondary-results">
-                        <h2>其他推荐委员会</h2>
-                        <div class="matches-grid">`;
-
-                    matches.secondaryResults.forEach(match => {
-                        resultsHtml += `
-                    <div class="match-card secondary">
-                        <div class="match-header">
-                            <h3>${match.parentSystem ? match.parentSystem + ' - ' : ''}${match.name}</h3>
-                            <div class="match-score secondary">匹配度：${match.score}%</div>
-                        </div>
-                        <p class="match-description">${match.desc}</p>
-                    </div>`;
-                    });
-
-                    resultsHtml += `
-                        </div>
-                    </div>
-                </div>`;
-
-                    document.getElementById("results").innerHTML = resultsHtml;
-                } catch (error) {
-                    console.error('显示结果时出错:', error);
-                    document.getElementById("results").innerHTML = '<p class="error">抱歉，计算结果时出现错误。</p>';
+                for (const [key, label] of Object.entries(features)) {
+                    if (systemStats[key] !== undefined && userStats[key] !== undefined) {
+                        const diff = Math.abs(userStats[key] - systemStats[key]);
+                        if (diff < bestMatch.diff) {
+                            bestMatch = {
+                                feature: label,
+                                diff: diff
+                            };
+                        }
+                    }
                 }
+
+                return bestMatch.feature;
+            }
+
+            function normalizeScore(score, dimension) {
+                const ranges = {
+                    'decision': { min: -102, max: 109, span: 211 },
+                    'collab': { min: -95, max: 92, span: 187 },
+                    'issue': { min: -89, max: 84, span: 173 },
+                    'compromise': { min: -69, max: 97, span: 166 },
+                    'comm': { min: -81, max: 94, span: 175 },
+                    'solution': { min: -84, max: 94, span: 178 }
+                };
+                
+                const range = ranges[dimension];
+                // 使用标准化公式：(原始分数 - 最小可能分数) / 总分跨度
+                const normalizedScore = (score - range.min) / range.span;
+                // 保留三位小数
+                return parseFloat(normalizedScore.toFixed(3));
             }
 
             function onload() {
@@ -309,22 +416,6 @@
                     console.log('获取到的参数值:', {
                         decision, collab, issue, compromise, comm, solution
                     });
-
-                    // 更新显示
-                    setBarValue("decision", decision);
-                    setBarValue("collab", collab);
-                    setBarValue("issue", issue);
-                    setBarValue("compromise", compromise);
-                    setBarValue("comm", comm);
-                    setBarValue("solution", solution);
-
-                    // 设置标签
-                    setLabel("decision", decision);
-                    setLabel("collab", collab);
-                    setLabel("issue", issue);
-                    setLabel("compromise", compromise);
-                    setLabel("comm", comm);
-                    setLabel("solution", solution);
 
                     // 显示匹配结果
                     displayResults();

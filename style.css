@@ -744,3 +744,122 @@ p {
 .contact-item a:hover {
     text-decoration: underline;
 }
+
+/* 结果显示样式 */
+.results-section {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.main-result {
+    margin-bottom: 3rem;
+}
+
+.match-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.match-card:hover {
+    transform: translateY(-2px);
+}
+
+.match-card.primary {
+    border: 2px solid #2196F3;
+}
+
+.match-card.secondary {
+    border: 1px solid #e0e0e0;
+}
+
+.match-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.match-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.score-circle {
+    background: #2196F3;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.match-card.secondary .score-circle {
+    background: #4CAF50;
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+}
+
+.match-description {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.match-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.stat-item {
+    padding: 0.5rem;
+    background: #f5f5f5;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.stat-item.highlight {
+    background: #E3F2FD;
+    color: #1976D2;
+    font-weight: 500;
+}
+
+.match-highlight {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: #E8F5E9;
+    border-radius: 6px;
+    color: #2E7D32;
+    font-size: 0.9rem;
+}
+
+.matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .matches-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .match-stats {
+        grid-template-columns: 1fr;
+    }
+}

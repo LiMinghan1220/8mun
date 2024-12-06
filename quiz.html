@@ -212,21 +212,21 @@
         }
     }
 
-    // 计算得分
+    // 计算得分 - 直接使用原始分数
     function calc_score(score, max) {
-        return (100 * (max + score) / (2 * max)).toFixed(1);
+        return score;
     }
 
     // 结果处理
     function results() {
         try {
-            // 计算最终得分
-            let decisionScore = calc_score(decision, max_decision);
-            let collabScore = calc_score(collab, max_collab);
-            let issueScore = calc_score(issue, max_issue);
-            let compromiseScore = calc_score(compromise, max_compromise);
-            let commScore = calc_score(comm, max_comm);
-            let solutionScore = calc_score(solution, max_solution);
+            // 使用原始分数
+            let decisionScore = decision;
+            let collabScore = collab;
+            let issueScore = issue;
+            let compromiseScore = compromise;
+            let commScore = comm;
+            let solutionScore = solution;
 
             // 创建答题结果对象
             const testResults = {
